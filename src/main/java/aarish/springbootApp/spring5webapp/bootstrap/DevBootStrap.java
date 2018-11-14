@@ -1,0 +1,45 @@
+package aarish.springbootApp.spring5webapp.bootstrap;
+
+import aarish.springbootApp.spring5webapp.model.Author;
+import aarish.springbootApp.spring5webapp.model.Book;
+import aarish.springbootApp.spring5webapp.repositories.AuthorRepository;
+import aarish.springbootApp.spring5webapp.repositories.BookRepository;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
+
+/**
+ * Created by Aarish on 14-Nov-2018
+ */
+@Component
+public class DevBootStrap implements ApplicationListener<ContextRefreshedEvent> {
+
+
+    private AuthorRepository authorRepository;
+    private BookRepository bookRepository;
+
+    public DevBootStrap(AuthorRepository authorRepository, BookRepository bookRepository) {
+        this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
+    }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        initData();
+    }
+
+    private void initData() {
+        Author a1 = new Author("Abc", "Def");
+        Book b1 = new Book("Java", "001", "Backend Publications");
+        a1.getBooks().add(b1);
+
+        authorRepository.save(a1);
+        bookRepository.save(b1);
+
+        Author a2 = new Author("Pqr", "Xyz");
+        Book b2 = new Book("Angular", "002", "Frontend Publishers");
+        a2.getBooks().add(b2);
+        authorRepository.save(a2);
+        bookRepository.save(b2);
+    }
+}
